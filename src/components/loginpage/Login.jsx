@@ -1,8 +1,11 @@
+import { Container } from "postcss";
 import React, { useState } from "react";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [userName, setuserName] = useState("");
+  const [loginState, setLoginState] = useState(true);
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -12,7 +15,14 @@ const Login = () => {
     setPassword(e.target.value);
   };
 
-  const [loginState,setLoginState]=useState("sign in")
+  const handelUserNameChange = (e) => {
+    setuserName(e.target.value);
+  };
+
+  const toggleSignIn = () => {
+    setLoginState(!loginState);
+  };
+
   return (
     <div className="relative font-mono">
       <img
@@ -22,9 +32,25 @@ const Login = () => {
       />
       <div className="absolute top-0 left-0 w-full h-full bg-black opacity-50"></div>
       <div className="absolute top-0 left-0 w-full h-full z-20 flex justify-center items-center text-white">
-        <div className="w-[28rem] h-[35rem] px-16 py-8 flex-col justify-start bg-black bg-opacity-70 rounded-sm ">
-          <form action="" method="post">
-            <h1 className="text-[3rem] font-semibold  my-6">Sign In</h1>
+        <div
+          id="container"
+          className="w-[28rem] h-[38rem] px-16 py-8 flex-col justify-start bg-black bg-opacity-70 rounded-sm "
+        >
+          {/* <form action="" method="post"> */}
+          <form action="">
+            <h1 className="text-[3rem] font-semibold capitalize my-6">
+              {loginState ? "sign in" : "sign up"}
+            </h1>
+            {!loginState && (
+              <input
+                name="btn"
+                type="text"
+                value={userName}
+                onChange={handelUserNameChange}
+                placeholder="Full Name"
+                className="w-full my-4 h-[4rem] outline-none  bg-transparent border-white border-solid border-[0.1rem] rounded p-4 text-white"
+              />
+            )}
             <input
               name="btn"
               type="email"
@@ -40,17 +66,36 @@ const Login = () => {
               placeholder="Password"
               className="w-full h-[4rem]  outline-none bg-transparent border-white border-solid border-[0.1rem] rounded p-4 my-4 text-white"
             />
-            <button className="w-full h-[1rem] text-[0.8rem] text-left capitalize">forget password?</button>
+            {loginState ? (
+              <button
+                type="button"
+                className="w-full h-[1rem] text-[0.8rem] text-left capitalize"
+                id="forgetbtn"
+              >
+                forget password?
+              </button>
+            ) : (
+              ""
+            )}
             <button
+              type="button"
               value="Sign In"
               className="w-full h-[2.6rem] rounded my-6 bg-[#D9232E] opacity-1 text-[1.4rem] font-normal"
             >
-              Sign In
+              {loginState ? "Sign In" : "Sign Up"}
             </button>
-            <h3 className="w-full h-[1rem] text-center text-[1.4rem] uppercase">or</h3>
+            <h3 className="w-full h-[1rem] text-center text-[1.4rem] uppercase">
+              or
+            </h3>
             <h3 className="w-full h-[1rem] my-[2rem] text-[1rem] capitalize text-[#b8b6b6]">
-              New to Netflix? 
-            <button className="pl-[0.4rem] text-white hover:underline" onClick={}>Sign Up Now</button>
+              {loginState ? "New to Netflix?" : ""}
+              <button
+                type="button"
+                className="pl-[0.4rem] text-white hover:underline capitalize"
+                onClick={toggleSignIn}
+              >
+                {loginState ? "sign up now" : "Already a user Sign in"}
+              </button>
             </h3>
           </form>
         </div>
