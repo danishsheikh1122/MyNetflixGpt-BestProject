@@ -1,11 +1,16 @@
-import { Container } from "postcss";
-import React, { useState } from "react";
-
+import React, { useState, useRef } from "react";
+import validate from "../../utils/validate.jsx";
+// import Alert from "../../utils/Alert.jsx";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userName, setuserName] = useState("");
   const [loginState, setLoginState] = useState(true);
+  const [validateVar, setValidate] = useState(null);
+
+  // creating reference of email and password
+  const ipemail = useRef("null");
+  const ippassword = useRef("null");
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -21,6 +26,18 @@ const Login = () => {
 
   const toggleSignIn = () => {
     setLoginState(!loginState);
+  };
+
+  const handelSubmitEvent = () => {
+    // if(validate(ipemail.current.value, ippassword.current.value)===null){
+    //   console.log("logged in")
+    // };
+    const checkValidator = validate(
+      ipemail.current.value,
+      ippassword.current.value
+    );
+    setValidate(checkValidator);
+    // console.log(checkValidator)
   };
 
   return (
@@ -58,6 +75,7 @@ const Login = () => {
               onChange={handleEmailChange}
               placeholder="Email Address"
               className="w-full h-[4rem] outline-none  bg-transparent border-white border-solid border-[0.1rem] rounded p-4 text-white"
+              ref={ipemail}
             />
             <input
               type="password"
@@ -65,11 +83,13 @@ const Login = () => {
               onChange={handlePasswordChange}
               placeholder="Password"
               className="w-full h-[4rem]  outline-none bg-transparent border-white border-solid border-[0.1rem] rounded p-4 my-4 text-white"
-            />
+              ref={ippassword}
+              />
+              {validateVar != null && <span className="capitalize text-red-400 ">{validateVar}</span>}
             {loginState ? (
               <button
                 type="button"
-                className="w-full h-[1rem] text-[0.8rem] text-left capitalize"
+                className="w-full h-[1rem] text-[0.9rem] text-left capitalize"
                 id="forgetbtn"
               >
                 forget password?
@@ -81,6 +101,7 @@ const Login = () => {
               type="button"
               value="Sign In"
               className="w-full h-[2.6rem] rounded my-6 bg-[#D9232E] opacity-1 text-[1.4rem] font-normal"
+              onClick={handelSubmitEvent}
             >
               {loginState ? "Sign In" : "Sign Up"}
             </button>
