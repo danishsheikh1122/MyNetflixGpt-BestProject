@@ -1,7 +1,36 @@
 import React, { useState, useRef } from "react";
 import validate from "../../utils/validate.jsx";
+import { useNavigate } from "react-router-dom";
 // import Alert from "../../utils/Alert.jsx";
+
+// firebase config imports
+// or just copy and paste the code from
+// https://firebase.google.com/docs/auth/web/start
+
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { auth } from "../../../firebase.jsx";
+
+// end
+
+
+// now after creating our store we need to subscribe it 
+
+// import { useSelector,useDispatch } from "react-redux";
+// import {addUser} from "../../utils/userSlice.jsx"
+// importing dispatch 
+
+
+// end
+
+
+
+
+
 const Login = () => {
+  const navigate=useNavigate()
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userName, setuserName] = useState("");
@@ -25,8 +54,23 @@ const Login = () => {
   };
 
   const toggleSignIn = () => {
+    // console.log(!loginState);
     setLoginState(!loginState);
   };
+
+
+
+  // subscribing to store starts
+    // const allUsers=useSelector((store) =>store.user.users)
+    // console.log(allUsers)
+  // ends
+
+  // dispatch start
+
+  // const dispatch=useDispatch()
+
+  // ends
+
 
   const handelSubmitEvent = () => {
     // if(validate(ipemail.current.value, ippassword.current.value)===null){
@@ -37,6 +81,45 @@ const Login = () => {
       ippassword.current.value
     );
     setValidate(checkValidator);
+    if (checkValidator) return;
+    if (!loginState) {
+      // sign up logic
+      createUserWithEmailAndPassword(
+        auth,
+        ipemail.current.value,
+        ippassword.current.value
+      )
+        .then((userCredential) => {
+          // Signed up creating user
+          const user = userCredential.user;
+          // console.log(user);
+          navigate('/browse')
+          // dispatch an action and push it to redux store
+          // ...
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          setValidate(errorCode + "-" + errorMessage);
+        });
+      } else {
+        // sign in logic
+        signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          // Signed in
+          const user = userCredential.user;
+          // console.log("user logged in ");
+          navigate('/browse')
+          
+          // ...
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          setValidate(errorCode + "-" + errorMessage);
+        });
+    }
+
     // console.log(checkValidator)
   };
 
@@ -84,8 +167,10 @@ const Login = () => {
               placeholder="Password"
               className="w-full h-[4rem]  outline-none bg-transparent border-white border-solid border-[0.1rem] rounded p-4 my-4 text-white"
               ref={ippassword}
-              />
-              {validateVar != null && <span className="capitalize text-red-400 ">{validateVar}</span>}
+            />
+            {validateVar != null && (
+              <span className="capitalize text-red-400 ">{validateVar}</span>
+            )}
             {loginState ? (
               <button
                 type="button"
