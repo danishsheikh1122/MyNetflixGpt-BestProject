@@ -1,9 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userSlice from "./userSlice.jsx";
-const appStore=configureStore({
-    reducer:{
-        user:userSlice
-    }
+import movieSlice from "./movieSlicejsx.jsx";
 
-})
-export default appStore
+const appStore = configureStore({
+    reducer: {
+        user: userSlice,
+        movies: movieSlice,
+    }
+});
+
+export default appStore;

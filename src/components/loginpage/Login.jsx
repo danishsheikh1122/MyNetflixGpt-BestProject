@@ -93,7 +93,7 @@ const Login = () => {
           // Signed up creating user
           const user = userCredential.user;
           // console.log(user);
-          navigate('/browse')
+          // navigate('/browse')
           // dispatch an action and push it to redux store
           // ...
         })
@@ -109,7 +109,7 @@ const Login = () => {
           // Signed in
           const user = userCredential.user;
           // console.log("user logged in ");
-          navigate('/browse')
+          // navigate('/browse')
           
           // ...
         })
