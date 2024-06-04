@@ -21,17 +21,16 @@ const VideoBg = ({ id }) => {
   }, []);
   return (
     <div>
-      vidoeo bg
-      <iframe
-        width="560"
-        height="315"
-        src={"https://www.youtube.com/embed/"+trailer}
-        title="YouTube video player"
-        frameBorder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        referrerPolicy="strict-origin-when-cross-origin"
-        allowFullScreen
-      ></iframe>
+      <iframe 
+  className="w-full aspect-video h-full -my-[7rem]"
+  src={`https://www.youtube.com/embed/${trailer}?rel=0&amp;autoplay=1&mute=1&controls=0`}
+  title="YouTube video player"
+  frameBorder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share;mute"
+  referrerPolicy="strict-origin-when-cross-origin"
+  allowFullScreen
+></iframe>
+
     </div>
   );
 };

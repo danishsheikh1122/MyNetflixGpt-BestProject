@@ -8,7 +8,7 @@ const MainContainerForBrowse = () => {
   const mainMovie = movies[0];
   const {title,overview,id}=mainMovie;
   return (
-    <div className="px-[8rem] py-[4rem]">
+    <div>
       <VideoBg id={id}></VideoBg>
       <VideoTitle title={title} overview={overview}></VideoTitle>
     </div>

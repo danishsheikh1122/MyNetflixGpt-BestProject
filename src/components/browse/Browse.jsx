@@ -1,12 +1,15 @@
 import React, { useEffect } from "react";
-import Header from "../hearder/Header.jsx"
+import Header from "../hearder/Header.jsx";
 import { API_OPTIONS } from "../../utils/constants.jsx";
-import { useDispatch } from "react-redux";
-import {addMovie} from "../../utils/movieSlicejsx";
-import MainContainerForBrowse from "../maincontainer/MainContainerForBrowse.jsx"
-import SecondaryContainerForBrowse from "../secondarycontainer/SecondaryContainerForBrowse.jsx"
+import { useDispatch, useSelector } from "react-redux";
+import { addMovie } from "../../utils/movieSlicejsx";
+import MainContainerForBrowse from "../maincontainer/MainContainerForBrowse.jsx";
+import SecondaryContainerForBrowse from "../secondarycontainer/SecondaryContainerForBrowse.jsx";
+import GptSearch from "../gptSearch/GptSearch.jsx";
 const Browse = () => {
   const dispatch = useDispatch();
+  const flag = useSelector((store) => store.gpt.flag);
+  console.log(flag);
 
   const fetchMovieData = async () => {
     try {
@@ -28,8 +31,14 @@ const Browse = () => {
   return (
     <div>
       <Header />
-      <MainContainerForBrowse />
-      <SecondaryContainerForBrowse />
+      {flag ? (
+        <GptSearch></GptSearch>
+      ) : (
+        <>
+          <MainContainerForBrowse />
+          <SecondaryContainerForBrowse />
+        </>
+      )}
     </div>
   );
 };

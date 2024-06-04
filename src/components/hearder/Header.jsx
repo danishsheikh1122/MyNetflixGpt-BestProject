@@ -4,11 +4,14 @@ import { useNavigate } from "react-router-dom";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { addUser, removeUser } from "../../utils/userSlice.jsx";
+import {toggleButton} from "../../utils/gptToggleSlice.jsx";
+
 const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const users = useSelector((state) => state.user);
-  const handelSignOut = () => {
+
+  const handleSignOut = () => {
     signOut(auth)
       .then(() => {})
       .catch((error) => {
@@ -16,56 +19,54 @@ const Header = () => {
         console.log(error);
       });
   };
-  // every time user login or sing out this will call and
-  // use below code t navigate
+  const handleGptButton=()=>{
+    dispatch(toggleButton());
+  }
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        // on sign up
         const { uid, email } = user;
         dispatch(addUser({ uid: uid, email: email }));
-        // we are stuck in navigate issue so here we can irectly use window.ocation.href to go to specific loaction
-        // for example
-        // window.location.href = "http://localhost:3000/browse";
-        // but good practice is to use nagigate hook form react-router-do
-        // so we navigate fromlogin lapage see loginpage lec-14 3:20
-        // ...
         navigate("/browse");
       } else {
-        // on User is signed out
         dispatch(removeUser());
         navigate("/");
-        // ...
       }
     });
-    
-    return () => {
-      unsubscribe;
-    };
-    // unsubscribe when component unmount
 
-  }, []); //call only once
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
   return (
-      <div className=" relative z-10 w-[full] h-[5rem] px-[5rem] font-mono  top-0 left-0 flex justify-between items-center">
-        <div className="w-[15rem] h-[full] px-8 py-2">
-          <img
-            src="https://cdn.cookielaw.org/logos/dd6b162f-1a32-456a-9cfe-897231c7763c/4345ea78-053c-46d2-b11e-09adaef973dc/Netflix_Logo_PMS.png"
-            alt=""
+    <div className="absolute z-20 w-full h-34 px-5 font-mono top-0 left-0 flex justify-between items-center" style={{ background: "linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0.1))" }}>
+
+        <div className="w-40 h-full mx-[8rem]  px-0 py-2">
+        <img
+          src="https://cdn.cookielaw.org/logos/dd6b162f-1a32-456a-9cfe-897231c7763c/4345ea78-053c-46d2-b11e-09adaef973dc/Netflix_Logo_PMS.png"
+          alt="Netflix Logo"
+          className="h-full"
           />
-        </div>
-        {users && (
-          <div className="w-[15rem] h-12 flex justify-center px-8 py-2">
-            <button
-              type="button"
-              className="bg-[#E50914] w-[6rem] rounded-md text-white font-semibold"
-              onClick={handelSignOut}
-            >
-              Sign Out
-            </button>
-          </div>
-        )}
       </div>
+      {users && (
+        <div className="w-96 h-12 flex justify-center items-center gap-[1rem] px-8 py-2">
+        <button
+            className="bg-[#E50914] w-24 h-[2rem] rounded-md text-white font-semibold hover:opacity-80 cursor-pointer"
+            onClick={handleSignOut}
+            >
+            Sign Out
+            </button>
+        <button
+            className="bg-[#10A37F] w-24 h-[2rem] rounded-md text-white font-semibold hover:opacity-80 cursor-pointer"
+            onClick={handleGptButton}
+            >
+            Gpt Search
+            </button>
+            </div>
+          )}
+    </div>
   );
 };
 
